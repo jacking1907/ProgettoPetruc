@@ -1,0 +1,96 @@
+\documentclass[a4paper,addpoints]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{amsfonts,amssymb,amsmath, amsthm}
+\usepackage{xcolor}
+\usepackage{pgf,tikz,pgfplots}
+\pgfplotsset{compat=1.15}
+\usepgfplotslibrary{fillbetween}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\usetikzlibrary{calc}
+\usepackage{tabu}
+
+\usepackage{tikz}
+\usetikzlibrary {shapes , arrows , fit , calc, positioning}
+\tikzset{box/.style={draw, rectangle, rounded corners, thick, node distance =7 em, text width =6 em, text centered, minimum height =2.5 em}}
+\tikzset{line/.style={draw, thick, -latex'}}
+
+\usepackage{tikz-uml}
+\tikzumlset{actor below=0.4cm, fill usecase=white, fill class=white, text=black, draw=black}
+
+
+
+\begin{document}
+
+\section*{TripWorld -- Diagramma dei casi d'uso}
+
+Il diagramma descrive le funzionalit\`a principali di TripWorld, la piattaforma web per la pianificazione di viaggi di gruppo.
+Gli attori sono:
+\begin{itemize}
+    \item \textbf{Visitatore}: utente non ancora autenticato, che pu\`o registrarsi o effettuare il login;
+    \item \textbf{Utente registrato}: partecipa ai viaggi, organizza l'itinerario con i luoghi da visitare, li consulta sulla mappa e inserisce le spese condivise;
+    \item \textbf{Creatore del viaggio}: \`e un utente registrato con permessi aggiuntivi (modifica del viaggio, inviti e gestione dei partecipanti), quindi eredita tutti i casi d'uso dell'utente registrato;
+    \item \textbf{Servizio mappe}: attore esterno (API) che permette di cercare i luoghi e di mostrarli sulla mappa.
+\end{itemize}
+Inserire una spesa include il calcolo automatico della quota di ogni partecipante, mentre l'invito richiede la generazione di un codice. La ricerca del luogo sulla mappa \`e un'opzione che estende la gestione delle attivit\`a.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.78, transform shape]
+    \begin{umlsystem}[x=4] {TripWorld}
+        \umlusecase[x=4, y=0,     width=3cm, name=reg]{Registrazione}
+        \umlusecase[x=4, y=-1.5,  width=3cm, name=login]{Login}
+        \umlusecase[x=4, y=-3.5,  width=3cm, name=profilo]{Modifica profilo}
+        \umlusecase[x=4, y=-5,    width=3cm, name=crea]{Crea viaggio}
+        \umlusecase[x=4, y=-6.5,  width=3cm, name=partecipa]{Partecipa tramite invito}
+        \umlusecase[x=4, y=-8,    width=3cm, name=viaggi]{Visualizza i propri viaggi}
+        \umlusecase[x=4, y=-9.5,  width=3cm, name=dash]{Visualizza dashboard}
+        \umlusecase[x=4, y=-11,   width=3cm, name=attivita]{Gestisci itinerario e luoghi}
+        \umlusecase[x=4, y=-12.5, width=3cm, name=mappa]{Visualizza mappa}
+        \umlusecase[x=4, y=-14,   width=3cm, name=spesa]{Inserisci spesa}
+        \umlusecase[x=4, y=-15.5, width=3cm, name=spese]{Visualizza spese e quote}
+        \umlusecase[x=4, y=-17.5, width=3cm, name=modviaggio]{Modifica info viaggio}
+        \umlusecase[x=4, y=-19,   width=3cm, name=invita]{Invita partecipanti}
+        \umlusecase[x=4, y=-20.5, width=3cm, name=gestpart]{Gestisci partecipanti}
+
+        \umlusecase[x=10, y=-11,  width=2.6cm, name=cerca]{Cerca luogo sulla mappa}
+        \umlusecase[x=10, y=-14,  width=2.6cm, name=quota]{Calcola quote}
+        \umlusecase[x=10, y=-19,  width=2.6cm, name=codice]{Genera codice invito}
+    \end{umlsystem}
+
+    \umlactor[x=-1, y=-0.75] {Visitatore}
+    \umlactor[x=-1, y=-10]   {Utente registrato}
+    \umlactor[x=-1, y=-19]   {Creatore del viaggio}
+    \umlactor[x=18, y=-12]   {Servizio mappe}
+
+    \umlinherit{Creatore del viaggio}{Utente registrato}
+
+    \umlassoc{Visitatore}{reg}
+    \umlassoc{Visitatore}{login}
+
+    \umlassoc{Utente registrato}{profilo}
+    \umlassoc{Utente registrato}{crea}
+    \umlassoc{Utente registrato}{partecipa}
+    \umlassoc{Utente registrato}{viaggi}
+    \umlassoc{Utente registrato}{dash}
+    \umlassoc{Utente registrato}{attivita}
+    \umlassoc{Utente registrato}{mappa}
+    \umlassoc{Utente registrato}{spesa}
+    \umlassoc{Utente registrato}{spese}
+
+    \umlassoc{Creatore del viaggio}{modviaggio}
+    \umlassoc{Creatore del viaggio}{invita}
+    \umlassoc{Creatore del viaggio}{gestpart}
+
+    \umlinclude{spesa}{quota}
+    \umlinclude{invita}{codice}
+    \umlextend{cerca}{attivita}
+
+    \umlassoc{Servizio mappe}{mappa}
+    \umlassoc{Servizio mappe}{cerca}
+\end{tikzpicture}
+\end{center}
+
+\end{document}
