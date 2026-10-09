@@ -1,0 +1,53 @@
+\documentclass[a4paper,addpoints]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{amsfonts,amssymb,amsmath, amsthm}
+\usepackage{xcolor}
+\usepackage{pgf,tikz,pgfplots}
+\pgfplotsset{compat=1.15}
+\usepgfplotslibrary{fillbetween}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\usetikzlibrary{calc}
+\usepackage{tabu}
+
+\usepackage{tikz}
+\usetikzlibrary {shapes , arrows , fit , calc, positioning}
+\tikzset{box/.style={draw, rectangle, rounded corners, thick, node distance =7 em, text width =6 em, text centered, minimum height =2.5 em}}
+\tikzset{line/.style={draw, thick, -latex'}}
+
+\usepackage{tikz-uml}
+\tikzumlset{actor below=0.4cm, fill usecase=white, fill class=white, text=black, draw=black}
+
+
+\begin{document}
+
+\section*{TripWorld -- Diagramma delle classi}
+
+Su TripWorld ogni \emph{utente} registrato ha un nome, un'email e una password. Un utente pu\`o partecipare a pi\`u \emph{viaggi} e ogni viaggio ha pi\`u partecipanti; per ogni partecipazione si memorizza il ruolo (creatore o partecipante) e la data di ingresso. Un viaggio ha un nome, una destinazione, una data di partenza e di ritorno, una descrizione e un codice invito con cui gli amici possono entrare. Ogni viaggio contiene un itinerario formato da \emph{attivit\`a}, che non esistono senza il viaggio: ogni attivit\`a ha un titolo, un giorno, un orario, una descrizione, un eventuale costo e un luogo (nome, indirizzo e coordinate usate per la mappa). Ogni viaggio contiene anche delle \emph{spese}, che non esistono senza il viaggio: una spesa ha una descrizione, un importo e una data, \`e pagata da un utente ed \`e condivisa da uno o pi\`u partecipanti, e il sistema calcola la quota di ciascuno.
+
+\vspace{0.5cm}
+\begin{center}
+\begin{tikzpicture}[scale=0.85, transform shape]
+
+\umlclass[x=0, y=0]{Utente}{Nome : string \\ Email : string \\ Password : string}{registrati() : void \\ login() : void \\ modificaProfilo() : void}
+
+\umlclass[x=8.5, y=0]{Viaggio}{Nome : string \\ Destinazione : string \\ DataPartenza : date \\ DataRitorno : date \\ Descrizione : string \\ CodiceInvito : string}{creaViaggio() : void \\ generaCodice() : string}
+
+\umlassoc[name=partec, mult1=*, mult2=*]{Utente}{Viaggio}
+\umlassocclass[x=4.2, y=3.5]{Partecipazione}{partec-1}{Ruolo : string \\ DataIngresso : date}{}
+
+\umlclass[x=17, y=0]{Attivita}{Titolo : string \\ Giorno : date \\ Orario : time \\ Descrizione : string \\ Costo : float \\ NomeLuogo : string \\ Indirizzo : string \\ Latitudine : float \\ Longitudine : float}{}
+\umlcompo[mult1=1, mult2=*]{Viaggio}{Attivita}
+
+\umlclass[x=0, y=-7]{Spesa}{Descrizione : string \\ Importo : float \\ Data : date}{calcolaQuota() : float}
+\umlcompo[mult1=1, mult2=*, geometry=|-]{Viaggio}{Spesa}
+
+\umlassoc[mult1=*, mult2=1, arg2=pagante, pos2=0.7, align=right, anchor1=110, anchor2=-110]{Spesa}{Utente}
+\umlassoc[mult1=*, mult2=1..*, arg2=coinvolti, pos2=0.7, align=left, anchor1=70, anchor2=-70]{Spesa}{Utente}
+
+\end{tikzpicture}
+\end{center}
+
+\end{document}
