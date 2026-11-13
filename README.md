@@ -66,7 +66,3 @@ Nel repository sono presenti i documenti di progetto:
 - diagramma ER
 I diagrammi sono realizzati in LaTeX. Per compilarli servono il file `.tex` e, per i diagrammi UML, `tikz-uml.sty` nella stessa cartella.
  
-## Stato del progetto
- 
-Progetto scolastico in fase di progettazione. Il sito sarà pensato per funzionare bene anche da smartphone.
- 
